@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inge David | Ingeniería agrícola: agua, suelo y permisos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF2EC; --surface:#F8FBF6; --text:#12333A; --muted:#4D6469; --line:#C3D1C8; --grid:#DCE6DF; --contour:#B4C8BC;
+  --water:#1B7EA6; --seal:#B3362F; --blueprint:#2B4C9B; --leaf:#4F9A3A; --soil:#A8692E; --stone:#3F6E73; --sun:#E9AE2B;
+  --s1:#CFA877; --s2:#8F5F40; --s3:#E6D3A5;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Public Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1C20; --surface:#14262B; --text:#E3EEE8; --muted:#9DB3B0; --line:#2B4147; --grid:#1D3238; --contour:#2A444B;
+    --water:#4AB3DC; --seal:#E0675C; --blueprint:#8BA6F2; --leaf:#8CCB6B; --soil:#D39052; --stone:#6FB0B0; --sun:#F4C95D;
+    --s1:#8C6B45; --s2:#5F3F2A; --s3:#A99A6E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1C20; --surface:#14262B; --text:#E3EEE8; --muted:#9DB3B0; --line:#2B4147; --grid:#1D3238; --contour:#2A444B;
+  --water:#4AB3DC; --seal:#E0675C; --blueprint:#8BA6F2; --leaf:#8CCB6B; --soil:#D39052; --stone:#6FB0B0; --sun:#F4C95D;
+  --s1:#8C6B45; --s2:#5F3F2A; --s3:#A99A6E;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;letter-spacing:-.015em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--water);outline-offset:3px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+
+/* Encabezado */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.02em}
+.brand svg{width:34px;height:34px;flex:none}
+.nav{display:flex;gap:22px;font-size:.98rem;font-weight:500}
+.nav a{text-decoration:none;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover{border-color:var(--water)}
+
+/* Hero: lista + plano */
+.hero{display:grid;gap:clamp(20px,4vw,56px);grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-areas:"intro stage" "list stage";align-items:start;padding-block:clamp(12px,3vw,36px) clamp(40px,6vw,80px)}
+.intro{grid-area:intro}
+.list-area{grid-area:list}
+.stage-wrap{grid-area:stage;position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}
+h1{font-size:clamp(2.35rem,5.2vw,4rem);font-weight:750;line-height:1;letter-spacing:-.03em;max-width:13ch}
+.lead{margin-top:20px;font-size:1.15rem;color:var(--muted);max-width:44ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:8px;border:2px solid var(--text);background:var(--text);color:var(--bg);font:600 1rem var(--body);cursor:pointer;text-decoration:none;transition:transform .15s ease, background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--text)}
+.btn.small{padding:9px 16px;font-size:.93rem}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hint{color:var(--muted);font-size:.95rem}
+.list-hint{margin:8px 0 14px}
+
+/* Lista de servicios (acordeón) */
+.svcs{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line)}
+.svc{border-top:1px solid var(--line)}
+.svc-btn{display:grid;grid-template-columns:6px 1fr auto;align-items:center;gap:16px;width:100%;padding:14px 6px 14px 0;background:none;border:0;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.svc-btn .bar{align-self:stretch;min-height:26px;border-radius:3px;background:var(--c);opacity:.55;transition:opacity .25s}
+.svc.open .svc-btn .bar,.svc-btn:hover .bar{opacity:1}
+.svc-name{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.01em}
+.plus{width:22px;height:22px;position:relative;flex:none}
+.plus::before,.plus::after{content:"";position:absolute;left:3px;right:3px;top:10px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
+.plus::after{transform:rotate(90deg)}
+.svc.open .plus::after{transform:rotate(0)}
+.panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.svc.open .panel{grid-template-rows:1fr}
+.panel>.inner{overflow:hidden;visibility:hidden;min-height:0;padding-left:22px;transition:visibility 0s .35s}
+.svc.open .panel>.inner{visibility:visible;transition-delay:0s}
+.inner>.in{padding:2px 0 22px;display:grid;gap:14px}
+.resumen{font-size:1.05rem}
+.inner ul{margin:0;padding-left:1.1em;display:grid;gap:5px;color:var(--muted)}
+.inner ul li::marker{color:var(--c)}
+.inner dl{margin:0;display:grid;gap:10px}
+.inner dt{font-weight:600}
+.inner dd{margin:0;color:var(--muted)}
+.inner strong.sub{font-family:var(--display);font-size:1rem}
+
+/* Plano */
+.stage{border:2px solid var(--text);border-radius:6px;background:var(--surface);overflow:hidden;position:relative}
+.stage svg{display:block;width:100%;height:auto}
+.legend{margin-top:12px;min-height:3.2em;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:.93rem}
+.lg{display:inline-flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:3px;background:var(--c);flex:none;border:1px solid color-mix(in srgb,var(--text) 35%,transparent)}
+.sw.line{height:4px;border:0;border-radius:2px}
+.sw.ring{background:var(--surface);border:2px solid var(--text);border-radius:50%}
+.sw.hatch{background:repeating-linear-gradient(45deg,var(--c) 0 2px,transparent 2px 5px)}
+.reset{margin-left:auto;background:none;border:0;border-bottom:2px solid var(--text);color:var(--text);font:600 .93rem var(--body);cursor:pointer;padding:2px 0}
+
+/* Capas del plano */
+.paper{fill:var(--surface)}
+.grid-line{fill:none;stroke:var(--grid);stroke-width:.8}
+.contours path{fill:none;stroke:var(--contour);stroke-width:1.1}
+.contours path.maj{stroke-width:1.9}
+.parcel-fill{fill:var(--bg);opacity:.55}
+.s1{fill:var(--s1)}.s2{fill:var(--s2)}.s3{fill:var(--s3)}
+.river{fill:none;stroke:var(--water);stroke-width:18;stroke-linecap:round;opacity:.85}
+.river-core{fill:none;stroke:var(--surface);stroke-width:3;opacity:.55;stroke-linecap:round}
+.outline{fill:none;stroke:var(--text);stroke-width:2.2;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.2s ease-out .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.layer{opacity:.9;transition:opacity .45s ease;cursor:pointer}
+.layer.soil{opacity:.3}
+.layer.dims{opacity:.35}
+.stage.focus .layer{opacity:.08}
+.stage.focus .layer.on{opacity:1}
+.crop{stroke:var(--leaf);stroke-width:3.2;stroke-dasharray:1.5 5.5;stroke-linecap:round;fill:none}
+.pipe{fill:none;stroke:var(--water);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.lat{fill:none;stroke:var(--water);stroke-width:1.6}
+.emit{fill:var(--water)}
+.ping{fill:none;stroke:var(--water);stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center}
+.stage.focus .layer.on .ping{animation:ping 1.9s ease-out infinite}
+@keyframes ping{0%{transform:scale(.4);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.canal{fill:none;stroke:var(--stone);stroke-width:9;stroke-linecap:round}
+.canal-in{fill:none;stroke:var(--surface);stroke-width:3;stroke-linecap:round;opacity:.7}
+.reservoir{fill:var(--water);fill-opacity:.7;stroke:var(--stone);stroke-width:4}
+.reservoir-in{fill:none;stroke:var(--surface);stroke-width:1.5;opacity:.7}
+.weir{fill:var(--stone);stroke:var(--text);stroke-width:1.5}
+.tank{fill:var(--stone);stroke:var(--text);stroke-width:1.5}
+.flow{fill:none;stroke:#fff;stroke-width:3;stroke-dasharray:6 18;stroke-linecap:round;stroke-opacity:0}
+.stage.focus .layer.on .flow{stroke-opacity:.9;animation:flow 1.3s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-48}}
+.intake{fill:var(--sun);stroke:var(--text);stroke-width:2}
+.ronda{fill:none;stroke:url(#hatch);stroke-width:130;stroke-linecap:round}
+.boundary{fill:none;stroke:var(--seal);stroke-width:3.5;stroke-dasharray:10 6;stroke-linejoin:round}
+.stamp{transform:rotate(-12deg);transform-box:fill-box;transform-origin:center}
+.stamp *{stroke:var(--seal)}
+.stamp .st-fill{fill:var(--surface);fill-opacity:.85;stroke:none}
+.stamp text{fill:var(--seal);stroke:none;font:800 9px var(--body)}
+.stage.focus .layer.on .stamp{animation:stamp .55s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes stamp{0%{transform:scale(1.9) rotate(-12deg);opacity:0}100%{transform:scale(1) rotate(-12deg);opacity:1}}
+.dim{fill:none;stroke:var(--blueprint);stroke-width:1.4}
+.dim-t{fill:var(--blueprint);font:600 11px var(--body);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.sheet{fill:var(--surface);stroke:var(--blueprint);stroke-width:1.5}
+.sheet-t{fill:var(--blueprint);font:600 10.5px var(--body)}
+.sheet-t.b{font-weight:800;font-size:12px}
+.pt{fill:var(--surface);stroke:var(--text);stroke-width:1.6}
+.scan{fill:url(#scanGrad)}
+.stage.focus .layer.on .scan{animation:scan 3.4s ease-in-out infinite alternate}
+@keyframes scan{from{transform:translateX(0)}to{transform:translateX(450px)}}
+.t{fill:var(--text);font:600 11.5px var(--body);paint-order:stroke;stroke:var(--surface);stroke-width:3.6px;stroke-linejoin:round}
+.leader{fill:none;stroke:var(--text);stroke-width:1;opacity:.6}
+.lbl{opacity:0;transition:opacity .5s .1s}
+.stage.focus .layer.on .lbl{opacity:1}
+
+/* Consulta */
+.consulta{background:var(--surface);border-block:1px solid var(--line);padding-block:clamp(40px,6vw,80px)}
+.consulta h2,.proceso h2{font-size:clamp(1.8rem,3.4vw,2.7rem);font-weight:720;max-width:20ch}
+.sec-lead{margin-top:12px;color:var(--muted);max-width:52ch}
+.c-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);margin-top:32px;align-items:start}
+.sits{display:grid;gap:10px}
+.sit{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:13px 14px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--text);font:inherit;cursor:pointer;transition:background .2s,border-color .2s}
+.sit:hover{border-color:var(--muted)}
+.sit .box{flex:none;width:20px;height:20px;border:1.5px solid var(--muted);border-radius:4px;display:grid;place-items:center;margin-top:2px}
+.sit .box::after{content:"";width:10px;height:5px;border-left:2px solid var(--bg);border-bottom:2px solid var(--bg);transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+.sit[aria-pressed="true"]{border-color:var(--text);background:color-mix(in srgb,var(--leaf) 14%,var(--bg))}
+.sit[aria-pressed="true"] .box{background:var(--text);border-color:var(--text)}
+.sit[aria-pressed="true"] .box::after{opacity:1}
+.recs{margin-top:22px}
+.recs h3{font-size:1.2rem;margin-bottom:10px}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--c);border-radius:999px;background:transparent;color:var(--text);font:600 .95rem var(--body);cursor:pointer}
+.pill:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.pill .dot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.pill small{font-weight:400;color:var(--muted);font-size:.82rem}
+form.f{display:grid;gap:14px}
+.f label{display:grid;gap:6px;font-weight:600;font-size:.95rem}
+.f input,.f textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--text);font:400 1rem var(--body)}
+.f input:focus,.f textarea:focus{border-color:var(--water)}
+.f .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.preview{margin-top:6px}
+.preview textarea{min-height:150px;resize:vertical;background:color-mix(in srgb,var(--sun) 10%,var(--bg));border-style:dashed}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+
+/* Proceso */
+.proceso{padding-block:clamp(40px,6vw,88px)}
+.steps{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;counter-reset:s}
+.steps li{position:relative;padding-top:50px}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;top:0;left:0;width:34px;height:34px;border-radius:50%;background:var(--water);color:var(--bg);display:grid;place-items:center;font:700 1rem var(--display)}
+.steps li::after{content:"";position:absolute;top:17px;left:44px;right:-28px;border-top:2px dashed var(--line)}
+.steps li:last-child::after{display:none}
+.steps h3{font-size:1.2rem;margin-bottom:6px}
+.steps p{color:var(--muted)}
+
+.foot{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--muted);font-size:.93rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot a{color:var(--text);font-weight:600}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;grid-template-areas:"intro" "stage" "list"}
+  .stage-wrap{position:static}
+  .c-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .steps li::after{display:none}
+}
+@media (max-width:520px){
+  .steps{grid-template-columns:1fr}
+  .f .row{grid-template-columns:1fr}
+  .nav{gap:16px}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .outline{stroke-dashoffset:0!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#inicio" aria-label="Inge David, inicio">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M6 26c6-6 10 2 16-3s8-5 12-2" fill="none" stroke="var(--water)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M20 9c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.500 2-5 5-9z" fill="var(--leaf)"/>
+      </svg>
+      Inge David
+    </a>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#consulta">Consulta</a>
+    </nav>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="intro">
+        <h1>Tu predio, leído desde el agua hasta el suelo.</h1>
+        <p class="lead">Ingeniería agrícola para conseguir el agua, los permisos y el diseño que tu terreno necesita para producir.</p>
+        <div class="cta-row">
+          <a class="btn" href="#consulta">Arma tu consulta</a>
+          <a class="btn ghost" href="#proceso">Cómo se trabaja</a>
+        </div>
+      </div>
+
+      <div class="stage-wrap">
+        <figure style="margin:0">
+          <p class="sr">Plano esquemático de un predio con una quebrada, cultivos, un canal, un reservorio y zonas de suelo. Al elegir un servicio en la lista, se resalta la parte del plano que le corresponde.</p>
+          <div class="stage" id="stage">
+            <svg viewBox="0 0 640 540" aria-hidden="true">
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path class="grid-line" d="M20 0H0V20"/></pattern>
+                <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--seal);stroke-width:2.2;opacity:.6"/></pattern>
+                <clipPath id="clipPredio"><polygon points="190,90 470,70 600,180 590,360 440,430 250,400 170,260"/></clipPath>
+                <linearGradient id="scanGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--leaf);stop-opacity:0"/><stop offset="1" style="stop-color:var(--leaf);stop-opacity:.6"/></linearGradient>
+              </defs>
+
+              <rect class="paper" width="640" height="540"/>
+              <rect width="640" height="540" fill="url(#grid)"/>
+              <g class="contours" id="contours"></g>
+              <polygon class="parcel-fill" points="190,90 470,70 600,180 590,360 440,430 250,400 170,260"/>
+
+              <!-- Suelo con SIG -->
+              <g class="layer soil" data-layers="suelo" clip-path="url(#clipPredio)">
+                <rect class="s1" x="100" y="40" width="540" height="460"/>
+                <polygon class="s2" points="330,60 640,40 640,250 480,240 400,180"/>
+                <polygon class="s3" points="290,330 640,300 640,500 290,500"/>
+                <rect class="scan" x="150" y="40" width="18" height="460"/>
+                <g id="pts"></g>
+                <g class="lbl">
+                  <text class="t" x="228" y="180">Franco</text>
+                  <text class="t" x="405" y="104">Arcilloso</text>
+                  <text class="t" x="448" y="398">Arenoso</text>
+                </g>
+              </g>
+
+              <!-- Hileras de cultivo -->
+              <g class="layer" data-layers="riego suelo" clip-path="url(#clipPredio)"><g id="crops"></g></g>
+
+              <!-- Río base -->
+              <path d="M40 -10 C70 120 120 220 150 300 S230 440 360 540" class="river"/>
+              <path d="M40 -10 C70 120 120 220 150 300 S230 440 360 540" class="river-core"/>
+
+              <!-- Riego -->
+              <g class="layer" data-layers="riego">
+                <path class="pipe" d="M378 236 H406 M406 163 V337"/>
+                <path class="lat" d="M406 177 H566 M406 219 H566 M406 261 H566 M406 303 H566"/>
+                <g id="emitters"></g>
+                <g class="lbl"><text class="t" x="410" y="150">Líneas de riego</text></g>
+              </g>
+
+              <!-- Límite del predio -->
+              <path class="outline" pathLength="1" d="M190 90 L470 70 L600 180 L590 360 L440 430 L250 400 L170 260 Z"/>
+
+              <!-- Obras hidráulicas -->
+              <g class="layer" data-layers="obras planos agua">
+                <path class="canal" d="M150 300 C200 296 245 262 298 238"/>
+                <path class="canal-in" d="M150 300 C200 296 245 262 298 238"/>
+              </g>
+              <g class="layer" data-layers="obras planos riego">
+                <ellipse class="reservoir" cx="338" cy="236" rx="40" ry="26"/>
+                <ellipse class="reservoir-in" cx="338" cy="236" rx="26" ry="15"/>
+              </g>
+              <g class="layer" data-layers="obras planos agua">
+                <rect class="weir" x="130" y="295" width="40" height="10" rx="2" transform="rotate(-20 150 300)"/>
+              </g>
+              <g class="layer" data-layers="obras planos">
+                <rect class="tank" x="210" y="269" width="26" height="14" rx="2" transform="rotate(-28 223 276)"/>
+              </g>
+              <g class="layer" data-layers="obras">
+                <g class="lbl">
+                  <text class="t" x="338" y="196" text-anchor="middle">Reservorio</text>
+                  <text class="t" x="218" y="252" text-anchor="middle">Desarenador</text>
+                  <text class="t" x="206" y="326">Canal</text>
+                  <text class="t" x="124" y="342" text-anchor="end">Azud y bocatoma</text>
+                </g>
+              </g>
+
+              <!-- Agua -->
+              <g class="layer" data-layers="agua">
+                <path class="flow" d="M40 -10 C70 120 120 220 150 300 S230 440 360 540"/>
+                <path class="flow" d="M150 300 C200 296 245 262 298 238"/>
+                <circle class="intake" cx="150" cy="300" r="8"/>
+                <g class="lbl">
+                  <text class="t" x="112" y="150">Fuente</text>
+                  <text class="t" x="134" y="280" text-anchor="end">Punto de captación</text>
+                </g>
+              </g>
+
+              <!-- Permisos ambientales -->
+              <g class="layer" data-layers="permisos">
+                <g clip-path="url(#clipPredio)"><path class="ronda" d="M40 -10 C70 120 120 220 150 300 S230 440 360 540"/></g>
+                <path class="boundary" d="M190 90 L470 70 L600 180 L590 360 L440 430 L250 400 L170 260 Z"/>
+                <g class="stamp">
+                  <circle class="st-fill" cx="505" cy="122" r="30"/>
+                  <circle cx="505" cy="122" r="30" fill="none" stroke-width="3"/>
+                  <circle cx="505" cy="122" r="25" fill="none" stroke-width="1"/>
+                  <path d="M492 116 l9 10 l17 -20" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(-5 -1)"/>
+                  <text x="505" y="144" text-anchor="middle">Aprobado</text>
+                </g>
+                <g class="lbl">
+                  <text class="t" x="300" y="58" text-anchor="middle">Límite del predio</text>
+                  <path class="leader" d="M300 63 V80"/>
+                  <text class="t" x="24" y="430">Ronda hídrica protegida</text>
+                  <path class="leader" d="M120 424 L204 318"/>
+                </g>
+              </g>
+
+              <!-- Planos -->
+              <g class="layer dims" data-layers="planos">
+                <circle cx="58" cy="72" r="18" fill="none" stroke="var(--blueprint)" stroke-width="1.5"/>
+                <path d="M58 56 L64 78 L58 73 L52 78Z" fill="var(--blueprint)"/>
+                <text class="dim-t" x="58" y="48" text-anchor="middle">N</text>
+                <path class="dim" d="M298 286 H378 M298 280 V292 M378 280 V292"/>
+                <text class="dim-t" x="338" y="304" text-anchor="middle">L = 24 m</text>
+                <path class="dim" d="M392 163 V337 M386 163 H398 M386 337 H398"/>
+                <text class="dim-t" transform="translate(380 250) rotate(-90)" text-anchor="middle">120 m</text>
+                <path class="dim" d="M232 274 L238 330 L300 330"/>
+                <text class="dim-t" x="304" y="334">i = 0,3 %</text>
+                <path class="dim" d="M406 340 L406 362 L440 362"/>
+                <text class="dim-t" x="444" y="366">Ø 75 mm</text>
+                <g>
+                  <rect class="sheet" x="440" y="462" width="190" height="68"/>
+                  <path class="dim" d="M440 482 H630"/>
+                  <text class="sheet-t b" x="452" y="476">Plano H-01</text>
+                  <text class="sheet-t" x="452" y="499">Escala 1:2000</text>
+                  <text class="sheet-t" x="452" y="518">Predio de ejemplo</text>
+                </g>
+                <g>
+                  <rect x="24" y="500" width="40" height="7" fill="var(--blueprint)"/>
+                  <rect x="64" y="500" width="40" height="7" fill="none" stroke="var(--blueprint)" stroke-width="1.5"/>
+                  <text class="dim-t" x="24" y="494">0</text>
+                  <text class="dim-t" x="104" y="494" text-anchor="end">100 m</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <figcaption class="legend" id="legend" aria-live="polite"></figcaption>
+        </figure>
+      </div>
+
+      <div class="list-area" id="servicios">
+        <p class="hint list-hint">Toca un servicio y mira cómo se ilumina en el plano.</p>
+        <ul class="svcs" id="svcs"></ul>
+      </div>
+    </section>
+  </main>
+</div>
+
+<section class="consulta" id="consulta">
+  <div class="wrap">
+    <h2>Arma tu consulta en un minuto</h2>
+    <p class="sec-lead">Marca lo que te pasa. Verás qué servicios te sirven y tendrás un mensaje listo para enviar.</p>
+    <div class="c-grid">
+      <div>
+        <div class="sits" id="sits" role="group" aria-label="Situaciones"></div>
+        <div class="recs" aria-live="polite">
+          <h3>Servicios que te sirven</h3>
+          <div class="pills" id="pills"></div>
+        </div>
+      </div>
+      <div>
+        <form class="f" id="form" onsubmit="return false">
+          <label>Tu nombre<input id="f-name" autocomplete="name" placeholder="Nombre y apellido"></label>
+          <div class="row">
+            <label>Municipio y vereda<input id="f-place" placeholder="Ej.: Vereda La Esperanza"></label>
+            <label>Hectáreas del predio<input id="f-area" inputmode="decimal" placeholder="Ej.: 12"></label>
+          </div>
+          <label>Tu caso en pocas palabras (opcional)<textarea id="f-note" rows="3" placeholder="Qué cultivas, de dónde sale el agua, qué te pidieron..."></textarea></label>
+        </form>
+        <div class="preview">
+          <label for="f-msg" style="font-weight:600;font-size:.95rem">Mensaje listo para enviar</label>
+          <textarea id="f-msg" class="f-msg" readonly style="width:100%;padding:11px 12px;border:1.5px dashed var(--line);border-radius:6px;color:var(--text);font:400 1rem var(--body);margin-top:6px;min-height:150px;resize:vertical;background:color-mix(in srgb,var(--sun) 10%,var(--bg))"></textarea>
+          <div class="actions" id="actions">
+            <button class="btn" type="button" id="copy">Copiar mensaje</button>
+            <a class="btn ghost" id="wa" href="#" target="_blank" rel="noopener" hidden>Enviar por WhatsApp</a>
+            <a class="btn ghost" id="mail" href="#" hidden>Enviar por correo</a>
+          </div>
+          <p class="hint" id="copy-hint" style="margin-top:10px" hidden>Copia el mensaje y envíaselo al Inge David por tu medio de contacto preferido.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="proceso" id="proceso">
+    <h2>Así se trabaja un proyecto</h2>
+    <p class="sec-lead">Cuatro pasos, de la primera visita a la obra o el trámite resuelto.</p>
+    <ol class="steps">
+      <li><h3>Visita y diagnóstico</h3><p>Recorremos el predio, vemos la fuente de agua y definimos qué necesitas.</p></li>
+      <li><h3>Datos en campo</h3><p>Medimos, tomamos muestras y reunimos los documentos del predio.</p></li>
+      <li><h3>Diseño y trámite</h3><p>Preparamos planos, cálculos y expedientes listos para radicar.</p></li>
+      <li><h3>Seguimiento</h3><p>Atendemos los requerimientos y acompañamos la obra hasta que funcione.</p></li>
+    </ol>
+  </section>
+  <footer class="foot">
+    <span>Inge David, ingeniería agrícola.</span>
+    <span id="foot-contact">El plano es una ilustración; cada predio se diagnostica en visita.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // Datos de contacto: escribe el número con indicativo de país (ej.: "573001234567") y/o un correo.
+  var WHATSAPP = "573117551993";
+  var EMAIL = "ingdavidduenas@gmail.com";
+
+  var SERVICES = [
+    { id:"agua", color:"--water", nombre:"Concesión de aguas", msg:"concesión de aguas",
+      resumen:"Consigue el derecho legal a usar agua de un río, quebrada, nacimiento o pozo para tu cultivo, tu ganado o tu consumo.",
+      incluye:["Revisión de la fuente y cálculo del caudal que necesitas","Armado del expediente técnico para la autoridad ambiental","Radicación y respuesta a los requerimientos","Seguimiento hasta que sale la resolución"],
+      recibes:"Expediente radicado y trámite acompañado de principio a fin.",
+      cuando:"Captas agua sin papeles, vas a ampliar tu uso o te hicieron un requerimiento.",
+      legend:[["--water","Fuente de agua",""],["--sun","Punto de captación","ring"],["--water","Conducción hasta el predio","line"]] },
+    { id:"permisos", color:"--seal", nombre:"Permisos ambientales", msg:"permisos ambientales",
+      resumen:"Identifica qué permisos necesita tu proyecto y gestiónalos sin perder tiempo entre ventanillas.",
+      incluye:["Diagnóstico de los permisos que aplican a tu caso","Documentos técnicos y formularios completos","Atención a visitas y requerimientos de la autoridad","Cronograma claro de trámites"],
+      recibes:"Ruta de permisos definida y trámites radicados.",
+      cuando:"Vas a construir, intervenir una fuente de agua, verter o aprovechar árboles.",
+      legend:[["--seal","Límite del predio","line"],["--seal","Ronda hídrica protegida","hatch"],["--seal","Trámite aprobado",""]] },
+    { id:"planos", color:"--blueprint", nombre:"Planos de obras hidráulicas", msg:"planos de obras hidráulicas",
+      resumen:"Planos claros y a escala para tramitar, cotizar y construir tu obra.",
+      incluye:["Toma de datos en campo","Planta, perfiles y cortes de la obra","Detalles constructivos y cantidades de obra","Planos listos para presentar a la autoridad o al contratista"],
+      recibes:"Juego de planos impreso y digital.",
+      cuando:"Una autoridad, un contratista o un financiador te pide planos.",
+      legend:[["--blueprint","Cotas y pendientes","line"],["--blueprint","Cuadro de rotulación",""],["--blueprint","Norte y escala",""]] },
+    { id:"riego", color:"--leaf", nombre:"Sistemas de riego", msg:"sistemas de riego",
+      resumen:"Diseño y asesoría para regar con la cantidad justa de agua: goteo, aspersión o gravedad, según tu cultivo.",
+      incluye:["Cálculo de las necesidades de agua del cultivo","Elección del sistema que mejor se ajusta a tu lote","Diseño de red, bombeo y filtrado","Lista de materiales y acompañamiento a la instalación"],
+      recibes:"Diseño del sistema con lista y presupuesto de materiales.",
+      cuando:"Riegas a ojo, pierdes agua o vas a sembrar un lote nuevo.",
+      legend:[["--leaf","Hileras de cultivo","line"],["--water","Tubería y laterales","line"],["--water","Emisores","ring"]] },
+    { id:"suelo", color:"--soil", nombre:"Suelo con SIG", msg:"análisis y gestión del suelo con SIG",
+      resumen:"Mapas de tu predio que muestran dónde el suelo rinde, dónde falla y qué corregir.",
+      incluye:["Plan de muestreo y lectura de los análisis de laboratorio","Mapas por zonas de suelo, pendiente y drenaje","Recomendaciones de manejo para cada zona","Base de datos geográfica de tu predio"],
+      recibes:"Mapas temáticos y recomendaciones de manejo por zona.",
+      cuando:"Una parte del lote rinde menos, vas a comprar un predio o planeas tus siembras.",
+      legend:[["--s1","Suelo franco",""],["--s2","Suelo arcilloso",""],["--s3","Suelo arenoso",""],["--surface","Puntos de muestreo","ring"]] },
+    { id:"obras", color:"--stone", nombre:"Diseño de obras hidráulicas", msg:"diseño de obras hidráulicas",
+      resumen:"Diseño de bocatomas, canales, reservorios y conducciones para captar, mover y almacenar agua con seguridad.",
+      incluye:["Dimensionamiento hidráulico de la obra","Diseño de las estructuras","Memorias de cálculo","Asesoría durante la construcción"],
+      recibes:"Diseño de la obra con memorias de cálculo.",
+      cuando:"Necesitas captar, conducir, almacenar o evacuar agua en tu finca.",
+      legend:[["--stone","Azud y bocatoma",""],["--stone","Canal y desarenador","line"],["--water","Reservorio",""]] }
+  ];
+
+  var SITS = [
+    { t:"Quiero usar agua de un río, quebrada, nacimiento o pozo", svc:["agua","permisos"] },
+    { t:"Una autoridad me pide un permiso ambiental", svc:["permisos"] },
+    { t:"Necesito planos para tramitar o construir una obra", svc:["planos","obras"] },
+    { t:"Quiero regar mejor mi cultivo", svc:["riego","suelo"] },
+    { t:"Mi lote rinde distinto en cada zona", svc:["suelo"] },
+    { t:"Quiero construir un reservorio, un canal o una bocatoma", svc:["obras","planos","agua"] }
+  ];
+
+  function $(s,r){return (r||document).querySelector(s)}
+  function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+  function byId(id){return SERVICES.filter(function(s){return s.id===id})[0]}
+
+  /* Curvas de nivel */
+  (function(){
+    var g=$("#contours"), out="";
+    function blob(cx,cy,r,seed){
+      var n=24, pts=[], i;
+      for(i=0;i<n;i++){
+        var a=i/n*Math.PI*2;
+        var k=1+0.16*Math.sin(3*a+seed)+0.09*Math.sin(5*a-seed*1.7)+0.05*Math.sin(2*a+seed*0.5);
+        pts.push([cx+Math.cos(a)*r*k*1.25, cy+Math.sin(a)*r*k*0.9]);
+      }
+      var d="M"+pts[0][0].toFixed(1)+" "+pts[0][1].toFixed(1);
+      for(i=0;i<n;i++){
+        var p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+        var c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6];
+        var c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+        d+="C"+c1[0].toFixed(1)+" "+c1[1].toFixed(1)+" "+c2[0].toFixed(1)+" "+c2[1].toFixed(1)+" "+p2[0].toFixed(1)+" "+p2[1].toFixed(1);
+      }
+      return d+"Z";
+    }
+    for(var i=0;i<9;i++){ out+='<path class="'+(i%4===3?'maj':'')+'" d="'+blob(480,230,30+i*34,i*0.35)+'"/>'; }
+    g.innerHTML=out;
+  })();
+
+  /* Hileras, emisores y puntos de muestreo */
+  (function(){
+    var c="", i, x, e="";
+    for(i=0;i<13;i++){ c+='<line class="crop" x1="412" x2="566" y1="'+(170+14*i)+'" y2="'+(170+14*i)+'"/>'; }
+    $("#crops").innerHTML=c;
+    [177,219,261,303].forEach(function(y){
+      for(x=426;x<=566;x+=20){ e+='<circle class="emit" cx="'+x+'" cy="'+y+'" r="2.6"/><circle class="ping" cx="'+x+'" cy="'+y+'" r="4"/>'; }
+    });
+    $("#emitters").innerHTML=e;
+    var pts=[[250,150],[330,120],[410,110],[520,150],[230,230],[300,300],[240,330],[350,370],[450,350],[540,300],[560,230],[360,170]], p="";
+    pts.forEach(function(q){ p+='<g><circle class="pt" cx="'+q[0]+'" cy="'+q[1]+'" r="4.5"/><path d="M'+(q[0]-8)+' '+q[1]+'H'+(q[0]+8)+'M'+q[0]+' '+(q[1]-8)+'V'+(q[1]+8)+'" stroke="var(--text)" stroke-width="1" opacity=".6"/></g>'; });
+    $("#pts").innerHTML=p;
+  })();
+
+  /* Lista de servicios */
+  var list=$("#svcs");
+  list.innerHTML=SERVICES.map(function(s){
+    return '<li class="svc" data-id="'+s.id+'" style="--c:var('+s.color+')">'+
+      '<button class="svc-btn" type="button" id="b-'+s.id+'" aria-expanded="false" aria-controls="p-'+s.id+'">'+
+        '<span class="bar" aria-hidden="true"></span><span class="svc-name">'+s.nombre+'</span><span class="plus" aria-hidden="true"></span>'+
+      '</button>'+
+      '<div class="panel" id="p-'+s.id+'" role="region" aria-labelledby="b-'+s.id+'"><div class="inner"><div class="in">'+
+        '<p class="resumen">'+s.resumen+'</p>'+
+        '<div><strong class="sub">Qué incluye</strong><ul>'+s.incluye.map(function(i){return '<li>'+i+'</li>'}).join('')+'</ul></div>'+
+        '<dl><div><dt>Recibes</dt><dd>'+s.recibes+'</dd></div><div><dt>Te sirve cuando</dt><dd>'+s.cuando+'</dd></div></dl>'+
+        '<div><button class="btn small" type="button" data-ask="'+s.id+'">Pedir asesoría de este servicio</button></div>'+
+      '</div></div></div></li>';
+  }).join('');
+
+  var stage=$("#stage"), layers=$$(".layer",stage), legend=$("#legend"), active=null;
+
+  function renderLegend(id){
+    if(!id){ legend.innerHTML='<span class="hint">Plano esquemático de un predio. Elige un servicio para ver qué le corresponde.</span>'; return; }
+    var s=byId(id);
+    legend.innerHTML=s.legend.map(function(l){ return '<span class="lg" style="--c:var('+l[0]+')"><span class="sw '+l[2]+'"></span>'+l[1]+'</span>'; }).join('')+
+      '<button class="reset" type="button" id="reset">Ver todo el predio</button>';
+    $("#reset").addEventListener("click",function(){ setActive(null); });
+  }
+
+  function setActive(id){
+    active=id;
+    stage.classList.toggle("focus",!!id);
+    layers.forEach(function(el){ el.classList.toggle("on", !!id && el.getAttribute("data-layers").split(" ").indexOf(id)>-1); });
+    $$(".svc").forEach(function(li){
+      var o=li.getAttribute("data-id")===id;
+      li.classList.toggle("open",o);
+      $(".svc-btn",li).setAttribute("aria-expanded",o?"true":"false");
+    });
+    renderLegend(id);
+  }
+
+  function showStage(){
+    var wrap=$(".stage-wrap");
+    if(window.matchMedia("(max-width:900px)").matches){
+      var r=wrap.getBoundingClientRect();
+      if(r.top<0||r.bottom>window.innerHeight){ wrap.scrollIntoView({block:"start"}); }
+    }
+  }
+
+  $$(".svc-btn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var id=b.parentNode.getAttribute("data-id");
+      if(active===id){ setActive(null); } else { setActive(id); showStage(); }
+    });
+  });
+  layers.forEach(function(el){
+    el.addEventListener("click",function(){ setActive(el.getAttribute("data-layers").split(" ")[0]); });
+  });
+  setActive(null);
+
+  /* Consulta */
+  var chosen={}, manual={};
+  var sits=$("#sits"), pills=$("#pills");
+  sits.innerHTML=SITS.map(function(s,i){
+    return '<button class="sit" type="button" aria-pressed="false" data-i="'+i+'"><span class="box" aria-hidden="true"></span><span>'+s.t+'</span></button>';
+  }).join('');
+  sits.addEventListener("click",function(e){
+    var b=e.target.closest(".sit"); if(!b) return;
+    var i=b.getAttribute("data-i"), on=b.getAttribute("aria-pressed")!=="true";
+    b.setAttribute("aria-pressed",on?"true":"false");
+    if(on){ chosen[i]=true; } else { delete chosen[i]; }
+    update();
+  });
+
+  function picked(){
+    var set={}, k;
+    for(k in manual){ set[k]=true; }
+    for(k in chosen){ SITS[k].svc.forEach(function(x){ set[x]=true; }); }
+    return SERVICES.filter(function(s){ return set[s.id]; });
+  }
+  function join(a){
+    if(a.length<2) return a.join("");
+    return a.slice(0,-1).join(", ")+" y "+a[a.length-1];
+  }
+  function buildMsg(){
+    var n=$("#f-name").value.trim(), loc=$("#f-place").value.trim(), ha=$("#f-area").value.trim(), c=$("#f-note").value.trim();
+    var p=picked().map(function(s){return s.msg});
+    var m="Hola Inge David"+(n?", soy "+n:"")+". ";
+    m+= p.length ? "Quiero asesoría en "+join(p)+". " : "Quiero una asesoría para mi predio. ";
+    if(loc){ m+="Mi predio está en "+loc+(ha?" y tiene "+ha+" hectáreas":"")+". "; }
+    else if(ha){ m+="Mi predio tiene "+ha+" hectáreas. "; }
+    if(c){ m+=c; }
+    return m.trim();
+  }
+  function update(){
+    var p=picked();
+    pills.innerHTML = p.length ? p.map(function(s){
+      return '<button class="pill" type="button" data-see="'+s.id+'" style="--c:var('+s.color+')"><span class="dot"></span>'+s.nombre+' <small>Ver en el plano</small></button>';
+    }).join('') : '<span class="hint">Marca una situación y aquí verás qué servicios te sirven.</span>';
+    var m=buildMsg();
+    $("#f-msg").value=m;
+    var wa=$("#wa"), mail=$("#mail");
+    if(WHATSAPP){ wa.hidden=false; wa.href="https://wa.me/"+WHATSAPP.replace(/\D/g,"")+"?text="+encodeURIComponent(m); }
+    if(EMAIL){ mail.hidden=false; mail.href="mailto:"+EMAIL+"?subject="+encodeURIComponent("Consulta de ingeniería agrícola")+"&body="+encodeURIComponent(m); }
+    $("#copy-hint").hidden = !!(WHATSAPP||EMAIL);
+  }
+  pills.addEventListener("click",function(e){
+    var b=e.target.closest(".pill"); if(!b) return;
+    setActive(b.getAttribute("data-see"));
+    $(".stage-wrap").scrollIntoView({block:"start"});
+  });
+  list.addEventListener("click",function(e){
+    var b=e.target.closest("[data-ask]"); if(!b) return;
+    manual[b.getAttribute("data-ask")]=true;
+    update();
+    $("#consulta").scrollIntoView({block:"start"});
+  });
+  ["#f-name","#f-place","#f-area","#f-note"].forEach(function(s){ $(s).addEventListener("input",update); });
+
+  var copyBtn=$("#copy");
+  copyBtn.addEventListener("click",function(){
+    var t=$("#f-msg").value;
+    function done(){ copyBtn.textContent="Mensaje copiado"; setTimeout(function(){ copyBtn.textContent="Copiar mensaje"; },2200); }
+    function fallback(){ var a=$("#f-msg"); a.select(); try{ document.execCommand("copy"); }catch(e){} done(); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done,fallback); } else { fallback(); }
+  });
+
+  /* Pie con contacto si está configurado */
+  (function(){
+    var parts=[];
+    if(WHATSAPP){ parts.push('<a href="https://wa.me/'+WHATSAPP.replace(/\D/g,"")+'" target="_blank" rel="noopener">WhatsApp</a>'); }
+    if(EMAIL){ parts.push('<a href="mailto:'+EMAIL+'">'+EMAIL+'</a>'); }
+    if(parts.length){ $("#foot-contact").innerHTML=parts.join(" &nbsp;|&nbsp; "); }
+  })();
+
+  update();
+})();
+</script>
+</body>
+</html>
